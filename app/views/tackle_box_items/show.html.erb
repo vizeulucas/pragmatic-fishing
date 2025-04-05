@@ -6,17 +6,23 @@
   <% end %>
 </div>
 
-<div class="selected-item">
-  <div class="header">
-    <div class="name-category">
-      <%= @item.bait.name %> &bull; <%= @item.bait.category %>
+<%= turbo_frame_tag @item do %>
+  <div class="selected-item">
+    <div class="header">
+      <div class="name-category">
+        <%= @item.bait.name %> &bull; <%= @item.bait.category %>
+      </div>
+      <%= tag.div id: "stats" do %>
+        <%= render "stats", fish_catches: @fish_catches %>
+      <% end %>
     </div>
-    <%= render "stats", fish_catches: @fish_catches %>
-  </div>
 
-  <%= render "fish_catches/form", fish_catch: @new_catch %>
+    <%= tag.div id: "new-catch" do %>
+      <%= render "fish_catches/form", fish_catch: @new_catch %>
+    <% end %>
 
-  <div class="catches">
-    <%= render @fish_catches %>
+    <div class="catches" id="catches">
+      <%= render @fish_catches %>
+    </div>
   </div>
-</div>
+<% end %>
