@@ -28,6 +28,12 @@ class TackleBoxItemsController < ApplicationController
     @item = current_user.tackle_box_items.create!(bait: @bait)
 
     @bait.my_tackle_box_item = @item
+
+    # the order doesn't matter, turbo_stream get precedent over html because is a more specific format than html
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to baits_url }
+    end
   end
 
   def destroy
@@ -36,7 +42,10 @@ class TackleBoxItemsController < ApplicationController
 
     @bait = @item.bait
 
-    render :create
+    respond_to do |format|
+      format.turbo_stream { render :create }
+      format.html { redirect_to baits_url }
+    end
   end
 
 end
