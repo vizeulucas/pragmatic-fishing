@@ -1,6 +1,7 @@
 class FishCatchesController < ApplicationController
   before_action :require_signin
   before_action :set_fish_catch, only: %i[show edit update destroy]
+  before_action :set_fish_catches, only: %i[create destroy]
 
   def index
     @pagy, @fish_catches =
@@ -29,7 +30,6 @@ class FishCatchesController < ApplicationController
     @fish_catch = current_user.fish_catches.new(fish_catch_params)
 
     if @fish_catch.save
-      @fish_catches = fish_catches_for_bait(@fish_catch.bait)
       @new_catch = current_user.fish_catches.new(bait: @fish_catch.bait)
     else
       render :new, status: :unprocessable_entity
@@ -46,6 +46,10 @@ private
 
   def set_fish_catch
     @fish_catch = current_user.fish_catches.find(params[:id])
+  end
+
+  def set_fish_catches
+    @fish_catches = fish_catches_for_bait(@fish_catch.bait)
   end
 
   def fish_catch_params
