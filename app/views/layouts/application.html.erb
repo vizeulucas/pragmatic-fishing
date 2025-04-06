@@ -16,7 +16,9 @@
   <body>
     <%= render "layouts/header" %>
 
-    <%= render "layouts/flash" %>
+    <%= tag.div id: "flash" do %>
+      <%= render "layouts/flash" %>
+    <% end %>
 
     <main>
       <div id="<%= content_id %>">

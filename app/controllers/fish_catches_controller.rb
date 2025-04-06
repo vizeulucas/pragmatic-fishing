@@ -1,7 +1,7 @@
 class FishCatchesController < ApplicationController
   before_action :require_signin
   before_action :set_fish_catch, only: %i[show edit update destroy]
-  before_action :set_fish_catches, only: %i[create destroy update]
+  before_action :set_fish_catches, only: %i[destroy update]
 
   def index
     @pagy, @fish_catches =
@@ -20,6 +20,7 @@ class FishCatchesController < ApplicationController
 
   def update
     if @fish_catch.update(fish_catch_params)
+      flash[:notice] = "Catch successfully updated!"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -30,6 +31,8 @@ class FishCatchesController < ApplicationController
 
     if @fish_catch.save
       @new_catch = current_user.fish_catches.new(bait: @fish_catch.bait)
+      @fish_catches = fish_catches_for_bait(@fish_catch.bait)
+      flash[:notice] = "Catch successfully created!"
     else
       render :new, status: :unprocessable_entity
     end
@@ -38,7 +41,7 @@ class FishCatchesController < ApplicationController
   def destroy
     @fish_catch.destroy
 
-    redirect_to tackle_box_item_for_catch(@fish_catch)
+    flash[:notice] = "Catch successfully destroyed."
   end
 
 private
